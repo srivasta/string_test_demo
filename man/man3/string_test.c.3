@@ -1,0 +1,913 @@
+.TH "string_test.c" 3 "7 Nov 2004" "Version Revision: 1.0.0" "TEST_STRINGS" \" -*- nroff -*-
+.ad l
+.nh
+.SH NAME
+string_test.c \- An sample implementation of common string functions. 
+.SH SYNOPSIS
+.br
+.PP
+\fC#include <stdio.h>\fP
+.br
+\fC#include <stdlib.h>\fP
+.br
+\fC#include <string.h>\fP
+.br
+\fC#include <ctype.h>\fP
+.br
+\fC#include <errno.h>\fP
+.br
+
+.SS "Defines"
+
+.in +1c
+.ti -1c
+.RI "#define \fBBEGIN_BLOCK\fP   do {"
+.br
+.RI "\fIBegin blocks for macros. \fP"
+.ti -1c
+.RI "#define \fBEND_BLOCK\fP   } while (0)"
+.br
+.RI "\fIAnd the corresponding End block. \fP"
+.ti -1c
+.RI "#define \fBASIZE\fP   256"
+.br
+.RI "\fIThe size of the alphabet -- which happens to be the ascii namespace. \fP"
+.ti -1c
+.RI "#define \fBsign\fP(x)   (x>0 ? 1 : (x<0 ? -1 : 0))"
+.br
+.RI "\fIA macro to determine the signed state of an integer. \fP"
+.in -1c
+.SS "Functions"
+
+.in +1c
+.ti -1c
+.RI "size_t \fBmanoj_strlen\fP (const char *s)"
+.br
+.RI "\fI7.21.6.3 The strlen function \fP"
+.ti -1c
+.RI "int \fBtest_strlen\fP (void)"
+.br
+.RI "\fITest the manoj_strlen function. \fP"
+.ti -1c
+.RI "char * \fBmanoj_strcpy\fP (char *dest, const char *src)"
+.br
+.RI "\fI7.21.2.3 The strcpy function \fP"
+.ti -1c
+.RI "int \fBtest_strcpy\fP (void)"
+.br
+.RI "\fITest the manoj_strcpy function. \fP"
+.ti -1c
+.RI "char * \fBmanoj_strncpy\fP (char *dest, const char *src, size_t n)"
+.br
+.RI "\fI7.21.2.4 The strncpy function \fP"
+.ti -1c
+.RI "int \fBtest_strncpy\fP (void)"
+.br
+.RI "\fITest the manoj_strncpy function. \fP"
+.ti -1c
+.RI "char * \fBmanoj_strdup\fP (const char *s)"
+.br
+.RI "\fIThe strdup function. \fP"
+.ti -1c
+.RI "int \fBtest_strdup\fP (void)"
+.br
+.RI "\fITest the manoj_strdup function. \fP"
+.ti -1c
+.RI "char * \fBmanoj_strcat\fP (char *dest, const char *src)"
+.br
+.RI "\fI7.21.3.1 The strcat function \fP"
+.ti -1c
+.RI "int \fBtest_strcat\fP (void)"
+.br
+.RI "\fITest the manoj_strcat function. \fP"
+.ti -1c
+.RI "char * \fBmanoj_strncat\fP (char *dest, const char *src, size_t n)"
+.br
+.RI "\fI7.21.3.2 The strncat function \fP"
+.ti -1c
+.RI "int \fBtest_strncat\fP (void)"
+.br
+.RI "\fITest the manoj_strncat function. \fP"
+.ti -1c
+.RI "int \fBmanoj_strcmp\fP (const char *s1, const char *s2)"
+.br
+.RI "\fI7.21.4.2 The strcmp function Synopsis \fP"
+.ti -1c
+.RI "int \fBtest_strcmp\fP (void)"
+.br
+.RI "\fITest the manoj_strcmp function. \fP"
+.ti -1c
+.RI "int \fBmanoj_strncmp\fP (const char *s1, const char *s2, size_t n)"
+.br
+.RI "\fI7.21.4.4 The strncmp function Synopsis \fP"
+.ti -1c
+.RI "int \fBtest_strncmp\fP (void)"
+.br
+.RI "\fITest the manoj_strncat function. \fP"
+.ti -1c
+.RI "int \fBstrcasecmp\fP (const char *s1, const char *s2)"
+.br
+.ti -1c
+.RI "int \fBmanoj_strcasecmp\fP (const char *s1, const char *s2)"
+.br
+.RI "\fIThe strcasecmp function Synopsis. \fP"
+.ti -1c
+.RI "int \fBtest_strcasecmp\fP (void)"
+.br
+.RI "\fITest the manoj_strcasecmp function. \fP"
+.ti -1c
+.RI "int \fBstrncasecmp\fP (const char *s1, const char *s2, size_t n)"
+.br
+.ti -1c
+.RI "int \fBmanoj_strncasecmp\fP (const char *s1, const char *s2, size_t n)"
+.br
+.RI "\fIThe strncasecmp function Synopsis. \fP"
+.ti -1c
+.RI "int \fBtest_strncasecmp\fP (void)"
+.br
+.RI "\fITest the manoj_strncat function. \fP"
+.ti -1c
+.RI "char * \fBmanoj_strchr\fP (const char *s, int c)"
+.br
+.RI "\fI7.21.5.2 The strchr function \fP"
+.ti -1c
+.RI "int \fBtest_strchr\fP (void)"
+.br
+.RI "\fITest the manoj_strnchr function. \fP"
+.ti -1c
+.RI "char * \fBmanoj_strrchr\fP (const char *s, int c)"
+.br
+.RI "\fI7.21.5.5 The strrchr function \fP"
+.ti -1c
+.RI "int \fBtest_strrchr\fP (void)"
+.br
+.RI "\fITest the manoj_strnchr function. \fP"
+.ti -1c
+.RI "char * \fBmanoj_strtok\fP (char *s, const char *delim)"
+.br
+.RI "\fI7.21.5.8 The strtok function \fP"
+.ti -1c
+.RI "int \fBtest_strtok\fP (void)"
+.br
+.RI "\fITest the manoj_strtok function. \fP"
+.ti -1c
+.RI "char * \fBstrtok_r\fP (char *s, const char *delim, char **ptrptr)"
+.br
+.ti -1c
+.RI "char * \fBmanoj_strtok_r\fP (char *s, const char *delim, char **ptrptr)"
+.br
+.RI "\fIThe strtok_r function. \fP"
+.ti -1c
+.RI "int \fBtest_strtok_r\fP (void)"
+.br
+.RI "\fITest the manoj_strtok_r function. \fP"
+.ti -1c
+.RI "char * \fBmanoj_strstr\fP (const char *haystack, const char *needle)"
+.br
+.RI "\fI7.21.5.7 The strstr function \fP"
+.ti -1c
+.RI "int \fBtest_strstr\fP (void)"
+.br
+.RI "\fITest the manoj_strtsr function. \fP"
+.ti -1c
+.RI "int \fBmain\fP (void)"
+.br
+.RI "\fIThe main entry point for this testing routine. \fP"
+.in -1c
+.SS "Variables"
+
+.in +1c
+.ti -1c
+.RI "const char * \fBversion\fP"
+.br
+.ti -1c
+.RI "int \fBerrno\fP"
+.br
+.ti -1c
+.RI "const char * \fBstrings_to_test\fP []"
+.br
+.RI "\fIA set of test strings used for regression testing. \fP"
+.in -1c
+.SH "Detailed Description"
+.PP 
+An sample implementation of common string functions. 
+
+Copyright (C) 2003 Manoj Srivastava
+.PP
+This is my entry for the code challenge. I do make use of the string.h header file, but only in the regression testing area, where my reimplementation of the string functions are tested against the libc versions.
+.PP
+These functions are rather more straight forward than those I am used to coding, and is therefore terser, and with fewer comments, than is my natural style -- all except the Boyer-Moore implementation in strstr, which was by far the most challenging.
+.PP
+I had fun coding this. I had forgotten how liberating C can be, coming back from C++ and java.
+.PP
+Definition in file \fBstring_test.c\fP.
+.SH "Define Documentation"
+.PP 
+.SS "#define ASIZE   256"
+.PP
+The size of the alphabet -- which happens to be the ascii namespace. 
+.PP
+Definition at line 646 of file string_test.c.
+.SS "#define BEGIN_BLOCK   do {"
+.PP
+Begin blocks for macros. 
+.PP
+Macros are dangerous if they use an if--then--else control statement, because they may be used in an if--then--else control statement themselsves, and should be enclosed in the following block to prevent problems (like dangling else statements). 
+.PP
+Definition at line 173 of file string_test.c.
+.SS "#define END_BLOCK   } while (0)"
+.PP
+And the corresponding End block. 
+.PP
+Definition at line 178 of file string_test.c.
+.SS "#define sign(x)   (x>0 ? 1 : (x<0 ? -1 : 0))"
+.PP
+A macro to determine the signed state of an integer. 
+.PP
+This is slightly misnamed, since it does distinguish between a 0 value and positive values -- it really does return a tristate value, ideal for testing strcmp like function return values. 
+.PP
+Definition at line 1226 of file string_test.c.
+.PP
+Referenced by test_strcasecmp(), test_strcmp(), test_strncasecmp(), and test_strncmp().
+.SH "Function Documentation"
+.PP 
+.SS "int main (void)"
+.PP
+The main entry point for this testing routine. 
+.PP
+\fBReturns:\fP
+.RS 4
+EXIT_SUCCESS on success, EXIT_FAILURE oterwise 
+.RE
+.PP
+
+.PP
+Definition at line 1640 of file string_test.c.
+.PP
+References test_strcasecmp(), test_strcat(), test_strchr(), test_strcmp(), test_strcpy(), test_strdup(), test_strlen(), test_strncasecmp(), test_strncat(), test_strncmp(), test_strncpy(), test_strrchr(), test_strstr(), test_strtok(), test_strtok_r(), and version.
+.SS "int manoj_strcasecmp (const char * s1, const char * s2)"
+.PP
+The strcasecmp function Synopsis. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIs1\fP The first of two strings to be compared 
+.br
+\fIs2\fP The second of two strings to be compared 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+The strcasecmp function returns an integer
+.RE
+.PP
+This is not an ANSI C function, but a BSD 4.4 extention. The strcasecmp function compares the string pointed to by s1 to the string pointed to by s2. The strcasecmp function returns an integer greater than, equal to, or less than zero, accordingly as the string pointed to by s1 is greater than, equal to, or less than the string s2. 
+.PP
+Definition at line 389 of file string_test.c.
+.PP
+Referenced by test_strcasecmp().
+.SS "char * manoj_strcat (char * dest_p, const char * src_p)"
+.PP
+7.21.3.1 The strcat function 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsrc_p\fP The source string 
+.br
+\fIdest_p\fP The destination the source string is appended to 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+The strcat function returns the value of dest_p.
+.RE
+.PP
+The strcat function appends a copy of the string pointed to by src_p (including the terminating null character) to the end of the string pointed to by dest_p. The initial character of src_p overwrites the null character at the end of dest_p. If copying takes place between objects that overlap, the behavior is undefined.
+.PP
+Memory for the new string is obtained with malloc(3), and can be freed with free(3). 
+.PP
+Definition at line 275 of file string_test.c.
+.PP
+Referenced by test_strcat().
+.SS "char * manoj_strchr (const char * str_p, int c)"
+.PP
+7.21.5.2 The strchr function 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIstr_p\fP The string to search in 
+.br
+\fIc\fP The character being searched for. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+A pointer to the located charcter, or NULL
+.RE
+.PP
+The strchr function locates the first occurrence of c (converted to a char) in the string pointed to by str_p. The terminating null character is considered to be part of the string. The strchr function returns a pointer to the located character, or a null pointer if the character does not occur in the string. 
+.PP
+Definition at line 459 of file string_test.c.
+.PP
+Referenced by test_strchr().
+.SS "int manoj_strcmp (const char * s1, const char * s2)"
+.PP
+7.21.4.2 The strcmp function Synopsis 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIs1\fP The first of two strings to be compared 
+.br
+\fIs2\fP The second of two strings to be compared 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+The strcmp function returns an integer
+.RE
+.PP
+The strcmp function compares the string pointed to by s1 to the string pointed to by s2. The strcmp function returns an integer greater than, equal to, or less than zero, accordingly as the string pointed to by s1 is greater than, equal to, or less than the string s2. 
+.PP
+Definition at line 321 of file string_test.c.
+.PP
+Referenced by test_strcmp().
+.SS "char * manoj_strcpy (char * dest_p, const char * src_p)"
+.PP
+7.21.2.3 The strcpy function 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsrc_p\fP The source string 
+.br
+\fIdest_p\fP The destination the source string is copied to 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+The strcpy function returns the value of dest_p.
+.RE
+.PP
+The strcpy function copies the string pointed to by src_p (including the terminating null character) into the array pointed to by dest_p. If copying takes place between objects that overlap, the behavior is undefined. 
+.PP
+Definition at line 209 of file string_test.c.
+.PP
+Referenced by test_strcpy().
+.SS "char * manoj_strdup (const char * src_p)"
+.PP
+The strdup function. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsrc_p\fP The source string 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+The strdup function returns a copy of the input string, or NULL
+.RE
+.PP
+This is not an ANSI C standard function, so no reference exists. The strdup() function returns a pointer to a new string which is a duplicate of the string src_p. Memory for the new string is obtained with malloc(3), and can be freed with free(3). 
+.PP
+Definition at line 253 of file string_test.c.
+.PP
+Referenced by test_strdup().
+.SS "size_t manoj_strlen (const char * src_p)"
+.PP
+7.21.6.3 The strlen function 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsrc_p\fP A pointer to the char array to whose length is required 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+The strlen() function returns the number of characters in src_p
+.RE
+.PP
+The strlen function computes the length of the string pointed to by src_p. The strlen function returns the number of characters that precede the null character. 
+.PP
+Definition at line 191 of file string_test.c.
+.PP
+Referenced by test_strlen().
+.SS "int manoj_strncasecmp (const char * s1, const char * s2, size_t n)"
+.PP
+The strncasecmp function Synopsis. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIs1\fP The first of two strings to be compared 
+.br
+\fIs2\fP The second of two strings to be compared 
+.br
+\fIn\fP The number of bytes compared 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+The strncasecmp function returns an integer
+.RE
+.PP
+This is not an ANSI C function, but a BSD 4.4 extention. The strncasecmp function compares not more than n characters (characters that follow a null character are not compared) from the array pointed to by s1 to the array pointed to by s2. The strncasecmp function returns an integer greater than, equal to, or less than zero, accordingly as the possibly null-terminated array pointed to by s1 is greater than, equal to, or less than the possibly null-terminated array pointed to by s2. 
+.PP
+Definition at line 425 of file string_test.c.
+.PP
+Referenced by test_strncasecmp().
+.SS "char * manoj_strncat (char * dest_p, const char * src_p, size_t n)"
+.PP
+7.21.3.2 The strncat function 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsrc_p\fP The source string 
+.br
+\fIdest_p\fP The destination the source string is appended to 
+.br
+\fIn\fP The number of bytes appended 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+The strncat function returns the value of dest_p.
+.RE
+.PP
+The strncat function appends not more than n characters (a null character and characters that follow it are not appended) from the array pointed to by src_p to the end of the string pointed to by dest_p. The initial character of src_p overwrites the null character at the end of dest_p. If copying takes place between objects that overlap, the behavior is undefined. 
+.PP
+Definition at line 299 of file string_test.c.
+.PP
+Referenced by test_strncat().
+.SS "int manoj_strncmp (const char * s1, const char * s2, size_t n)"
+.PP
+7.21.4.4 The strncmp function Synopsis 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIs1\fP The first of two strings to be compared 
+.br
+\fIs2\fP The second of two strings to be compared 
+.br
+\fIn\fP The number of bytes compared 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+The strncmp function returns an integer
+.RE
+.PP
+The strncmp function compares not more than n characters (characters that follow a null character are not compared) from the array pointed to by s1 to the array pointed to by s2. The strncmp function returns an integer greater than, equal to, or less than zero, accordingly as the possibly null-terminated array pointed to by s1 is greater than, equal to, or less than the possibly null-terminated array pointed to by s2. 
+.PP
+Definition at line 355 of file string_test.c.
+.PP
+Referenced by test_strncmp().
+.SS "char * manoj_strncpy (char * dest_p, const char * src_p, size_t n)"
+.PP
+7.21.2.4 The strncpy function 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIsrc_p\fP The source string 
+.br
+\fIdest_p\fP The destination the source string is copied to 
+.br
+\fIn\fP The number of bytes copied 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+The strncpy function returns the value of dest_p.
+.RE
+.PP
+The strncpy function copies not more than n characters (characters that follow a null character are not copied) from the array pointed to by src_p to the array pointed to by dest_p. if there is no null byte among the first n bytes of src_p, the result will not be null-terminated.
+.PP
+In the case where the length of src_p is less than that of n, the remainder of dest_p will be padded with nulls. 
+.PP
+Definition at line 234 of file string_test.c.
+.PP
+Referenced by test_strncpy().
+.SS "char * manoj_strrchr (const char * str_p, int c)"
+.PP
+7.21.5.5 The strrchr function 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIstr_p\fP The string to search in 
+.br
+\fIc\fP The character being searched for. 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+A pointer to the located charcter, or NULL
+.RE
+.PP
+The strrchr function locates the last occurrence of c (converted to a char) in the string pointed to by str_p. The terminating null character is considered to be part of the string. The strchr function returns a pointer to the located character, or a null pointer if the character does not occur in the string. 
+.PP
+Definition at line 481 of file string_test.c.
+.PP
+Referenced by test_strrchr().
+.SS "char * manoj_strstr (const char * haystack, const char * needle)"
+.PP
+7.21.5.7 The strstr function 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIhaystack\fP The string space to search in 
+.br
+\fIneedle\fP The string to search for 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+The strstr function returns a pointer to the located string, or NULL
+.RE
+.PP
+The strstr function locates the first occurrence in the string pointed to by haystack of the sequence of characters (excluding the terminating null character) in the string pointed to by needle.
+.PP
+The strstr function returns a pointer to the located string, or a null pointer if the string is not found. If needle points to a string with zero length, the function returns haystack.
+.PP
+This implementation uses the Boyer-Moore algorithm. This algorithm searches for the pattern in a window that slides along the string to be searched. It is as if we have opened a window on the text to allow us to see only pat_lenght characters. Later, the window is slid to the right, allowing us to view other positions. The text of the pattern is ompared to the text exposed in the window, in a right to left order. In case of a mimatch, the window is slid over and the match restarted. The value of Boyer-Moore is that the window is slid over by more than one character (which is what the brute force method does), and this improes the efficiency of the algorithm, since we do not look at unfeasible positions to start matching. The amount by which we slide the window over is the maximum safe value (we do not want to slide the window too far, in case we miss a match.
+.PP
+How much we can skip is determined by thte following hueristics:
+.IP "1." 4
+The bad character rule: looking just at the character that didn't match
+.IP "2." 4
+The Good suffix rule: Looking at the suffix matched so far
+.PP
+.PP
+The bad character rule.
+.PP
+Look at the character in the window that is being compared at the moment. In case of a mismatch, if the character does not occur in the search pattern at all, then there is no possibility that that character can be part of a match, and any instance of the pattern in the text must start to the right of the mismatched character, so the whole window can be slid over just beyond the character. (In other words, any orientation of the window that spans the mismatched charactercan't result in a match). So, if we had already matched m charactrers from the right hand side of the window, the window slides patlenght - m steps in this case.
+.PP
+.IP "\(bu" 2
+Observation 1: If char in the window is known not to occur in the pattern, then there is no need to consider the possibility of the pattern occuring anywhere bedore the current char. If we had already matched d chars, the window shifts by patlen -d characters.
+.PP
+.PP
+If the mismatched character does occur in the pattern, we need to slide the window over until the character in the pattern matches the character in the string. If the character occuers multiple times in the pattern, we need to slide the rightmost occurance of the character over the text in the string; however, sometimes that means sliding the window backwards, which we know can't be right. So at the very least, the minimum skip is at least one charactrer.
+.PP
+.IP "\(bu" 2
+Observation 2: If the rightmost occurrence of the character being tested is d characters from the rightmost character in the pattern, then we can slide down d characters without looking for matches, to align the character in the text and in the pattern. If we slide any less than d, the characters won't match.(We need to allow for any characters already matched when we slide the window, since what we really are doing is to align the characters).
+.PP
+.PP
+Uses knowledge of one character in the text, the character that is current;ly being examined. 
+.PP
+The Good Suffix Hueristic
+.PP
+This hueristic applies for patterns with repeating strings. The bad charcter hueristic shall also work for patterns with repeating subpatterns, but the search will not be as eficient as possible. By examining partial matches and repeats in the search pattern, it is possible to make more drastic shifts in the window and match more rapidly. This hueristic represents the largest skip which can be made until the characters that have been matched coincide with another sequence in the pattern. Thus, we use our knowledge of a substring that exists in the text to help determine the safe shift. Any new position of the pattern that overlaps the current postion in the text _must_ match the characters we already know exist at this location (since we have matched them), since otherwise a mismatch is inevitable. In addition, the character that caused a mismatch right now must match its counterpart in the pattern in the new shift, or else the same mimatch would occur again.
+.PP
+The amount we shift is the lenght of the longest suffix of the matched pattern that matches a prefix of the pattern. 
+.PP
+Definition at line 683 of file string_test.c.
+.PP
+References errno.
+.PP
+Referenced by test_strstr().
+.SS "char * manoj_strtok (char * str_p, const char * delim)"
+.PP
+7.21.5.8 The strtok function 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIstr_p\fP The string to be tokenized 
+.br
+\fIdelim\fP The string conmtaining the list of token separators 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+The strtok function returns a pointer to the first token, or NULL
+.RE
+.PP
+A sequence of calls to the strtok function breaks the string pointed to by str_p into a sequence of tokens, each of which is delimited by a character from the string pointed to by delim. The first call in the sequence has a non-null first argument; subsequent calls in the sequence have a null first argument. The separator string pointed to by delim may be different from call to call.
+.PP
+The first call in the sequence searches the string pointed to by str_p for the first character that is not contained in the current separator string pointed to by delim. If no such character is found, then there are no tokens in the string pointed to by s1 and the strtok function returns a null pointer. If such a character is found, it is the start of the first token.
+.PP
+The strtok function then searches from there for a character that is contained in the current separator string. If no such character is found, the current token extends to the end of the string pointed to by s1, and subsequent searches for a token will return a null pointer. If such a character is found, it is overwritten by a null character, which terminates the current token. The strtok function saves a pointer to the following character, from which the next search for a token will start.
+.PP
+Each subsequent call, with a null pointer as the value of the first argument, starts searching from the saved pointer and behaves as described above.
+.PP
+The implementation shall behave as if no library function calls the strtok function.
+.PP
+The strtok function returns a pointer to the first character of a token, or a null pointer if there is no token.
+.PP
+This function modifies its first argument. The strtok() function uses a static buffer while parsing, so it's not thread safe. The strtok() function cannot be used on constant strings. 
+.PP
+Definition at line 548 of file string_test.c.
+.PP
+Referenced by test_strtok().
+.SS "char * manoj_strtok_r (char * str_p, const char * delim, char ** ptrptr)"
+.PP
+The strtok_r function. 
+.PP
+\fBParameters:\fP
+.RS 4
+\fIstr_p\fP The string to be tokenized 
+.br
+\fIdelim\fP The string conmtaining the list of token separators 
+.br
+\fIptrptr\fP Pointer to a user allocated buffer 
+.RE
+.PP
+\fBReturns:\fP
+.RS 4
+The strtok function returns a pointer to the first token, or NULL
+.RE
+.PP
+This is a POSIX extention, and is not a ANSI C function. The \fBstrtok_r()\fP function is a reentrant version of the strtok() function, which instead of using its own static buffer, requires a pointer to a user allocated char*. This pointer, the ptrptr parameter, must be the same while parsing the same string.
+.PP
+This function modifies its first argument, and cannot be used on constant strings. 
+.PP
+Definition at line 604 of file string_test.c.
+.PP
+Referenced by test_strtok_r().
+.SS "int strcasecmp (const char * s1, const char * s2)"
+.PP
+Referenced by test_strcasecmp().
+.SS "int strncasecmp (const char * s1, const char * s2, size_t n)"
+.PP
+Referenced by test_strncasecmp().
+.SS "char* strtok_r (char * s, const char * delim, char ** ptrptr)"
+.PP
+Referenced by test_strtok_r().
+.SS "int test_strcasecmp (void)"
+.PP
+Test the manoj_strcasecmp function. 
+.PP
+\fBReturns:\fP
+.RS 4
+0 on success, a negative integer on failure 
+.RE
+.PP
+
+.PP
+Definition at line 1316 of file string_test.c.
+.PP
+References manoj_strcasecmp(), sign, strcasecmp(), and strings_to_test.
+.PP
+Referenced by main().
+.SS "int test_strcat (void)"
+.PP
+Test the manoj_strcat function. 
+.PP
+\fBReturns:\fP
+.RS 4
+0 on success, a negative integer on failure 
+.RE
+.PP
+
+.PP
+Definition at line 1128 of file string_test.c.
+.PP
+References manoj_strcat(), and strings_to_test.
+.PP
+Referenced by main().
+.SS "int test_strchr (void)"
+.PP
+Test the manoj_strnchr function. 
+.PP
+\fBReturns:\fP
+.RS 4
+0 on success, a negative integer on failure 
+.RE
+.PP
+
+.PP
+Definition at line 1392 of file string_test.c.
+.PP
+References manoj_strchr(), and strings_to_test.
+.PP
+Referenced by main().
+.SS "int test_strcmp (void)"
+.PP
+Test the manoj_strcmp function. 
+.PP
+\fBReturns:\fP
+.RS 4
+0 on success, a negative integer on failure 
+.RE
+.PP
+
+.PP
+Definition at line 1233 of file string_test.c.
+.PP
+References manoj_strcmp(), sign, and strings_to_test.
+.PP
+Referenced by main().
+.SS "int test_strcpy (void)"
+.PP
+Test the manoj_strcpy function. 
+.PP
+\fBReturns:\fP
+.RS 4
+0 on success, a negative integer on failure 
+.RE
+.PP
+
+.PP
+Definition at line 1000 of file string_test.c.
+.PP
+References manoj_strcpy(), and strings_to_test.
+.PP
+Referenced by main().
+.SS "int test_strdup (void)"
+.PP
+Test the manoj_strdup function. 
+.PP
+\fBReturns:\fP
+.RS 4
+0 on success, a negative integer on failure 
+.RE
+.PP
+
+.PP
+Definition at line 1082 of file string_test.c.
+.PP
+References manoj_strdup(), and strings_to_test.
+.PP
+Referenced by main().
+.SS "int test_strlen (void)"
+.PP
+Test the manoj_strlen function. 
+.PP
+\fBReturns:\fP
+.RS 4
+0 on success, a negative integer on failure 
+.RE
+.PP
+
+.PP
+Definition at line 964 of file string_test.c.
+.PP
+References manoj_strlen(), and strings_to_test.
+.PP
+Referenced by main().
+.SS "int test_strncasecmp (void)"
+.PP
+Test the manoj_strncat function. 
+.PP
+\fBReturns:\fP
+.RS 4
+0 on success, a negative integer on failure 
+.RE
+.PP
+
+.PP
+Definition at line 1354 of file string_test.c.
+.PP
+References manoj_strncasecmp(), sign, strings_to_test, and strncasecmp().
+.PP
+Referenced by main().
+.SS "int test_strncat (void)"
+.PP
+Test the manoj_strncat function. 
+.PP
+\fBReturns:\fP
+.RS 4
+0 on success, a negative integer on failure 
+.RE
+.PP
+
+.PP
+Definition at line 1176 of file string_test.c.
+.PP
+References manoj_strncat(), and strings_to_test.
+.PP
+Referenced by main().
+.SS "int test_strncmp (void)"
+.PP
+Test the manoj_strncat function. 
+.PP
+\fBReturns:\fP
+.RS 4
+0 on success, a negative integer on failure 
+.RE
+.PP
+
+.PP
+Definition at line 1274 of file string_test.c.
+.PP
+References manoj_strncmp(), sign, and strings_to_test.
+.PP
+Referenced by main().
+.SS "int test_strncpy (void)"
+.PP
+Test the manoj_strncpy function. 
+.PP
+\fBReturns:\fP
+.RS 4
+0 on success, a negative integer on failure 
+.RE
+.PP
+
+.PP
+Definition at line 1039 of file string_test.c.
+.PP
+References manoj_strncpy(), and strings_to_test.
+.PP
+Referenced by main().
+.SS "int test_strrchr (void)"
+.PP
+Test the manoj_strnchr function. 
+.PP
+\fBReturns:\fP
+.RS 4
+0 on success, a negative integer on failure 
+.RE
+.PP
+
+.PP
+Definition at line 1428 of file string_test.c.
+.PP
+References manoj_strrchr(), and strings_to_test.
+.PP
+Referenced by main().
+.SS "int test_strstr (void)"
+.PP
+Test the manoj_strtsr function. 
+.PP
+\fBReturns:\fP
+.RS 4
+0 on success, a negative integer on failure 
+.RE
+.PP
+
+.PP
+Definition at line 1604 of file string_test.c.
+.PP
+References manoj_strstr(), and strings_to_test.
+.PP
+Referenced by main().
+.SS "int test_strtok (void)"
+.PP
+Test the manoj_strtok function. 
+.PP
+\fBReturns:\fP
+.RS 4
+0 on success, a negative integer on failure 
+.RE
+.PP
+
+.PP
+Definition at line 1464 of file string_test.c.
+.PP
+References manoj_strtok().
+.PP
+Referenced by main().
+.SS "int test_strtok_r (void)"
+.PP
+Test the manoj_strtok_r function. 
+.PP
+\fBReturns:\fP
+.RS 4
+0 on success, a negative integer on failure 
+.RE
+.PP
+
+.PP
+Definition at line 1533 of file string_test.c.
+.PP
+References manoj_strtok_r(), and strtok_r().
+.PP
+Referenced by main().
+.SH "Variable Documentation"
+.PP 
+.SS "int \fBerrno\fP"
+.PP
+Referenced by manoj_strstr().
+.SS "const char* \fBstrings_to_test\fP[]"
+.PP
+\fBInitial value:\fP
+.PP
+.nf
+ 
+  {
+   'This ia a longish text string, but not that long, at that',
+   'The long jump \0 and some trailing text at-that',
+   '',
+   'Some more test strings',
+   'Yet another one',
+   'what-finally-stops--at-at-that point', 
+   'aksdy923492p4  p39475 q0349750[q3hf30q79340 320496t034 03q495609324uy509y',
+   'character is considered to be part of the string. The chr at-that point',
+   0
+  }
+.fi
+A set of test strings used for regression testing. 
+.PP
+Definition at line 946 of file string_test.c.
+.PP
+Referenced by test_strcasecmp(), test_strcat(), test_strchr(), test_strcmp(), test_strcpy(), test_strdup(), test_strlen(), test_strncasecmp(), test_strncat(), test_strncmp(), test_strncpy(), test_strrchr(), and test_strstr().
+.SS "const char* \fBversion\fP\fC [static]\fP"
+.PP
+\fBInitial value:\fP
+.PP
+.nf
+ 
+  '$Id: string_test.c,v 1.6 2003/03/03 01:36:47 srivasta Exp $'
+.fi
+.PP
+Definition at line 16 of file string_test.c.
+.PP
+Referenced by main().
+.SH "Author"
+.PP 
+Generated automatically by Doxygen for TEST_STRINGS from the source code.
